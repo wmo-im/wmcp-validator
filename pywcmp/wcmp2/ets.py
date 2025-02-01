@@ -190,6 +190,13 @@ class WMOCoreMetadataProfileTestSuite2:
             status['message'] = 'Invalid characters in id'
             return status
 
+        local_identifier = identifier_tokens[-1]
+
+        if local_identifier in ['', None]:
+            status['code'] = 'FAILED'
+            status['message'] = 'Empty / null local identifier'
+            return status
+
         return status
 
     def test_requirement_conformance(self):

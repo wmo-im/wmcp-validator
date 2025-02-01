@@ -3,7 +3,7 @@
 # Authors: Tom Kralidis <tomkralidis@gmail.com>
 #          Ján Osuský <jan.osusky@iblsoft.com>
 #
-# Copyright (c) 2024 Tom Kralidis
+# Copyright (c) 2025 Tom Kralidis
 # Copyright (c) 2022 Government of Canada
 # Copyright (c) 2020 IBL Software Engineering spol. s r. o.
 #
@@ -152,6 +152,23 @@ class WCMP2ETSTest(unittest.TestCase):
         """
 
         with open(get_test_file_path('data/wcmp2-failing-invalid-identifier-space.json')) as fh:  # noqa
+            record = json.load(fh)
+            ts = WMOCoreMetadataProfileTestSuite2(record)
+            results = ts.run_tests()
+
+            codes = [r['code'] for r in results['tests']]
+
+            self.assertEqual(codes.count('FAILED'), 1)
+            self.assertEqual(codes.count('PASSED'), 11)
+            self.assertEqual(codes.count('SKIPPED'), 0)
+
+    def test_fail_invalid_identifier_empty(self):
+        """
+        Simple tests for a failing record with an invalid
+        identifier (empty local identifier)
+        """
+
+        with open(get_test_file_path('data/wcmp2-failing-invalid-identifier-empty.json')) as fh:  # noqa
             record = json.load(fh)
             ts = WMOCoreMetadataProfileTestSuite2(record)
             results = ts.run_tests()
